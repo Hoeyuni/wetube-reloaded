@@ -1,18 +1,26 @@
 import Video from "../models/Video";
 
 export const home = (req, res) => {
-  Video.find({}, (error, videos) => {});
-  console.log(1 + 1);
-  return res.render("home", { pageTitle: "Home" });
+  Video.find({})
+    .then((videos) => {
+      console.log("videos", videos);
+      return res.render("home", { pageTitle: "Home", videos: videos });
+    })
+    .catch((error) => {
+      console.log("errors", error);
+    });
 };
+
 export const watch = (req, res) => {
   const { id } = req.params;
   return res.render("watch", { pageTitle: `Watching` });
 };
+
 export const getEdit = (req, res) => {
   const { id } = req.params;
   return res.render("edit", { pageTitle: `Editing` });
 };
+
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
