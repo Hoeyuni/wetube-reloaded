@@ -58,22 +58,18 @@ export const postUpload = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findByIdAndDelete(id);
-  //delete video
   return res.redirect("/");
 };
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
   const { keyword } = req.query;
+  let videos = [];
   if (keyword) {
-    //search
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(keyword, "i"),
+      },
+    });
   }
-  return res.render("search", { pageTitle: "Search" });
+  return res.render("search", { pageTitle: "Search", videos });
 };
-
-// 1. globalRouter에서 search route 생성
-// 2. videoController에 search controller 생성
-// 3. base.pug를 확장하는 search template 생성
-// 3-1. form을 get방식으로 하나 생성, URL에 정보가 보일 수 있도록
-// 3-2. 예시를 포함한 input 생성, submit 버튼 생성, input에 이름도 정해줘서 keyword가 URL에 등장하게 만듦
-// 4. req.query로 URL에 있는 모든 정보들을 확인할 수 있다.
-// 5. keyword가 때때로 undefined일 수 있다는 것을 배웠다.
