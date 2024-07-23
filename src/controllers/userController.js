@@ -8,12 +8,12 @@ export const postJoin = async (req, res) => {
 
   if (password !== password2) {
     // 패스워드 확인
-    return res.render("join", { pageTitle, errorMessage: "Password confirmation does not match" });
+    return res.status(400).render("join", { pageTitle, errorMessage: "Password confirmation does not match" });
   }
 
   const exists = await User.exists({ $or: [{ username: req.body.username }, { email }] });
   if (exists) {
-    return res.render("join", { pageTitle, errorMessage: "This username/email is already taken" });
+    return res.status(400).render("join", { pageTitle, errorMessage: "This username/email is already taken" });
   }
 
   // $or:[{a},{b}] : 배열 중 어떤 조건이 하나라도 true면 해당 데이터를 찾아온다,
